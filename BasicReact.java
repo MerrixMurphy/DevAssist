@@ -1,8 +1,28 @@
 public class BasicReact {
     String path;
+    String name;
+    
+    private String[] customFileNameFormatter(String name){
+      String fileName = null;
+      String[] splitCaps = null;
 
-    private void lvlOne() {
+      if (name.contains(" ")){
+        fileName = name.replaceAll(" ", "_");
+        splitCaps = name.split(" ");
+      }
+
+      for(int i = 0; i < splitCaps.length; i++){
+        splitCaps[i] = splitCaps[i].substring(0, 1).toUpperCase() + splitCaps[i].substring(1);
+      }
+
+      String capitalName = String.join(" ", splitCaps);
+      String[] formattedNames = {fileName, capitalName};
+      return formattedNames;
+    }
+
+    private void lvlOne(String name, String description) {
         try{
+          String[] formattedNames = customFileNameFormatter(name);
           Directory dir[] = {
             new Directory("front-end"),
             new Directory("back-end")};
@@ -41,7 +61,7 @@ public class BasicReact {
               {
                   \"name\": \"dynamic-react-app\",
                   \"version\": \"1.0.0\",
-                  \"description\": \"dynamic description\",
+                  \"description\": \"description\",
                   \"private\": true,
                   \"repository\": {
                       \"type\": \"git\",
@@ -63,7 +83,7 @@ public class BasicReact {
                       \"node-fetch\": \"^3.2.4\"
                   }
               }
-              """), 
+              """.replaceAll("dynamic-react-app", formattedNames[0]).replaceAll("description", description)), 
               new FileBasics("README.md", 
               """
               # Dynamic React App
@@ -71,7 +91,7 @@ public class BasicReact {
               ## Current Status: Development
               
                Summary
-            """)
+            """.replaceAll("Dynamic React App", formattedNames[1]))
           };
 
           for(FileBasics f : files){
@@ -83,8 +103,9 @@ public class BasicReact {
         }
     }
 
-    private void lvlTwo() {
+    private void lvlTwo(String name) {
         try {
+          String[] formattedNames = customFileNameFormatter(name);
           Directory dir[] = {
             new Directory("front-end/src"),
             new Directory("front-end/public"),
@@ -131,7 +152,7 @@ public class BasicReact {
                     \"nodemon\": \"^2.0.15\"
                 }
             }
-                  """),
+                  """.replaceAll("dynamic-react-app", formattedNames[0]).replaceAll("dynamic react app", name)),
             new FileBasics("back-end/.gitignore", 
             """
               # dependencies
@@ -161,7 +182,7 @@ yarn-error.log*
                 ## Current Status: Development
                 
                  Summary
-            """),
+            """.replaceAll("Dynamic React App", formattedNames[1])),
             new FileBasics("back-end/knexfile.js", 
               """
                 require(\"dotenv\").config();
@@ -239,7 +260,7 @@ module.exports = {
                       \"npm-run-all\": \"^4.1.5\"
                   }
               }
-            """),
+            """.replaceAll("dynamic-react-app", formattedNames[0]).replaceAll("dynamic react app", name)),
             new FileBasics("front-end/.gitignore", 
               """
                 # dependencies
@@ -269,7 +290,7 @@ module.exports = {
                 ## Current Status: Development
                 
                  Summary
-            """),
+            """.replaceAll("Dynamic React App", formattedNames[1])),
             new FileBasics("front-end/.env", 
               """
                 REACT_APP_API_BASE_URL=http://localhost:5000
@@ -285,8 +306,9 @@ module.exports = {
         }
     }
 
-    private void lvlThree() {
+    private void lvlThree(String name, String description) {
         try {
+          String[] formattedNames = customFileNameFormatter(name);
           Directory dir[] = {
             new Directory("front-end/src/layout"),
             new Directory("front-end/src/utils"),
@@ -381,7 +403,7 @@ ReactDOM.render(
     <div id=\"root\"></div>
   </body>
 </html>
-              """),
+              """.replaceAll("Dynamic React App", formattedNames[1]).replaceAll("description", description)),
             new FileBasics("back-end/src/app.js","""
               const path = require(\"path\");
 
@@ -392,16 +414,12 @@ ReactDOM.render(
             
             const errorHandler = require(\"./error/errorHandler\");
             const notFound = require(\"./error/notFound\");
-            
-            const dynamicRouter = require(\"./dynamic/dynamic.router\");
-            
+                        
             const app = express();
             
             app.use(cors());
             app.use(express.json());
-            
-            app.use(\"/dynamic\", dynamicRouter);
-            
+                        
             app.use(notFound);
             app.use(errorHandler);
             
@@ -617,12 +635,6 @@ function nav() {
         <nav >
 <div >
         <ul>
-          <li >
-            <Link to=\"/dynamic\">
-              <span  />
-              &nbsp;Dynamic
-            </Link>
-          </li>
         </ul>
       </div>
     </nav>
@@ -638,7 +650,6 @@ import { Link } from 'react-router-dom';
 function footer() {
     return (
         <footer id=\"footer\">
-                    <div><a href=\"https://dynamic\" target=\"blank\"><img className='footerImg' src={require('./images/dynamic.png')} alt=\"dynamic\"/></a></div>
         </footer>
   )
 }
@@ -707,9 +718,9 @@ module.exports = knex;
         }
     }
 
-    private void lvlFive() {
+    private void lvlFive(String name) {
         try{
-
+          String[] formattedNames = customFileNameFormatter(name);
             FileBasics[] files = {
             new FileBasics("front-end/src/utils/api/api.js","""
               const API_BASE_URL = 
@@ -726,9 +737,9 @@ Dynamic Summary
 */
 const externalAPIs = [
   {
-    apiName: \"dynamic\",
+    apiName: \"dynamic-api\",
     urlName:
-      \"https://dynamic\",
+      \"https://dynamic-api\",
     requestSpec: {},
   },
 ];
@@ -753,13 +764,13 @@ const seeder = async () => {
         const listedData = [];
         res.forEach((data) => {
           switch (Object.keys(data)[0]) {
-            case \"dynamic\":
+            case \"dynamic-condition\":
               listedData.push({
-                dynamic: data.dynamic,
+                dynamic-table-key: data.dynamic-data-key,
               });
               break;
             default:
-              console.log(`Sorry no dynamic found for ${data}`);
+              console.log(`Sorry no tables found for ${data}`);
           }
         });
         return listedData;
@@ -774,7 +785,7 @@ const seeder = async () => {
 };
 
 seeder();
-                """)};
+                """.replaceAll("Dynamic", formattedNames[1]))};
       
               for(FileBasics f : files){
                 FileBasics.fileCreator(path, f.name, f.content);
@@ -784,30 +795,34 @@ seeder();
     }
 }
 
-    public void treeBuilder(String url) {
+    public void treeBuilder(String url, String repo, String description) {
         try{
             path = url;
-            lvlOne();
-            lvlTwo();
-            lvlThree();
+            name = repo;
+            name = name.toLowerCase();
+
+            lvlOne(name, description);
+            lvlTwo(name);
+            lvlThree(name, description);
             lvlFour();
-            lvlFive();
+            lvlFive(name);
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
 }
 
-public void addComponent(String url){
+    public void addComponent(String url, String name){
   try{
     path = url;
+    name = name.toLowerCase();
     FileBasics[] files = {
-      new FileBasics("front-end/src/utils/components/component.js","""
-        function form(props) {
+      new FileBasics("front-end/src/utils/components/"+name+".js","""
+        function component(props) {
           return \"check\"
       }
       
-      export default form;
-          """)};
+      export default component;
+          """.replaceAll("component", name))};
           for(FileBasics f : files){
             FileBasics.fileCreator(path, f.name, f.content);
           }
@@ -815,4 +830,147 @@ public void addComponent(String url){
     System.out.println("Error: " + e);
   }
 }
+
+    public void addNav(String url, String name){
+  try{
+    path = url + "front-end/src/layout/nav.js";
+    name = name.toLowerCase();
+    String[] formattedNames = customFileNameFormatter(name);
+    String amendment = """
+      <li >
+      <Link to=\"/nav\">
+        <span  />
+        &nbsp;Nav
+      </Link>
+    </li>
+          """.replaceAll("nav", formattedNames != null ? formattedNames[0] : name).replaceAll("Nav", formattedNames[1]);
+    String key = "</ul>";
+    FileBasics.fileEditor(path, key, amendment);
+  } catch (Exception e) {
+    System.out.println("Error: " + e);
+  }
+}
+
+    public void addFooter(String url, String name, int linkType){
+  try{
+    path = url + "front-end/src/layout/footer.js";
+    name = name.toLowerCase();
+    String[] formattedNames = customFileNameFormatter(name);
+    String amendment = null;
+
+    if (linkType == 0){
+      amendment = """
+        <div>
+        <Link to=\"/footer\">
+          <span  />
+          &nbsp;Footer
+        </Link>
+      </div>
+            """.replaceAll("footer", formattedNames != null ? formattedNames[0] : name).replaceAll("Footer", formattedNames[1]);
+    } else {
+      amendment = """
+        <div>
+        <a href=\"https://localhost:3000\" target=\"blank\"><img className='footerImg' src={require('./images/footer.png')} alt=\"Footer\">
+        </a>
+      </div>
+            """.replaceAll("footer", formattedNames != null ? formattedNames[0] : name).replaceAll("Footer", formattedNames[1]);
+    }
+    String key = "</footer>";
+    FileBasics.fileEditor(path, key, amendment);
+  } catch (Exception e) {
+    System.out.println("Error: " + e);
+  }
+}
+
+    public void addMain(String url, String name){
+      try{
+        name = name.toLowerCase();
+        String[] formattedNames = customFileNameFormatter(name);
+        path = url + "front-end/src/"+formattedNames[0];
+        Directory dir[] = {
+          new Directory(path),
+        };
+        
+        for(Directory d : dir){
+          Directory.dirCreator(path, d.name);
+        }
+        FileBasics[] files = {
+        new FileBasics(path+"/"+formattedNames[0]+".js","""
+          import React from \"react\";
+          import { Link } from \"react-router-dom\";
+          
+          function Dynamic() {
+          
+            return (
+              <main className=\"text-center\">
+                <h1 className=\"clearmargin\">Dynamic</h1>
+              </main>
+            );
+          }
+          
+          export default Dynamic;
+                """.replaceAll("Dynamic", formattedNames[1]))};
+      
+              for(FileBasics f : files){
+                FileBasics.fileCreator(path, f.name, f.content);
+              }
+
+        String amendment1 = """
+          import Dynamic from '../dynamic/dynamic';
+              """.replaceAll("dynamic", formattedNames != null ? formattedNames[0] : name).replaceAll("Dynamic", formattedNames[1]);
+        String amendment2 = """
+          <Route path=\"/dynamic\" element={<Dynamic />} />
+              """.replaceAll("dynamic", formattedNames != null ? formattedNames[0] : name).replaceAll("Dynamic", formattedNames[1]);
+        String key1 = "import NotFound from \"./notFound\";";
+        String key2 = "<Route element={<NotFound />} />";
+        path = url + "front-end/src/layout/routes.js";
+        FileBasics.fileEditor(path, key1, amendment1);
+        FileBasics.fileEditor(path, key2, amendment2);
+      } catch (Exception e) {
+        System.out.println("Error: " + e);
+      }
+    }
+
+    public void addSub(String url, String name, String sub){
+      try{
+        sub = sub.toLowerCase();
+        String[] formattedNames = customFileNameFormatter(sub);
+        String[] formattedDir = customFileNameFormatter(name);
+        path = url + "front-end/src/"+name+"/"+formattedNames[0]+".js";
+        FileBasics[] files = {
+        new FileBasics(path,"""
+          import React from \"react\";
+          import { Link } from \"react-router-dom\";
+          
+          function Dynamic() {
+          
+            return (
+              <main className=\"text-center\">
+                <h1 className=\"clearmargin\">Dynamic</h1>
+              </main>
+            );
+          }
+          
+          export default Dynamic;
+                """.replaceAll("Dynamic", formattedNames[1]))};
+      
+              for(FileBasics f : files){
+                FileBasics.fileCreator(path, f.name, f.content);
+              }
+
+        String amendment1 = """
+          import Dynamic from '../dynamic-main/dynamic-sub';
+              """.replaceAll("dynamic-main", formattedDir != null ? formattedDir[0] : name).replaceAll("dynamic-sub", formattedNames != null ? formattedNames[0] : sub).replaceAll("Dynamic", formattedNames[1]);
+        String amendment2 = """
+          <Route path=\"/dynamic-main/dynamic-sub\" element={<Dynamic />} />
+              """.replaceAll("dynamic-main", formattedDir != null ? formattedDir[0] : name).replaceAll("dynamic-sub", formattedNames != null ? formattedNames[0] : sub).replaceAll("Dynamic", formattedNames[1]);
+        String key1 = "import Dynamic from \"../dynamic/dynamic\";".replaceAll("dynamic", formattedDir != null ? formattedDir[0] : name).replaceAll("Dynamic", formattedDir[1]);
+        String key2 = "<Route element={<NotFound />} />";
+        path = url + "front-end/src/layout/routes.js";
+        FileBasics.fileEditor(path, key1, amendment1);
+        FileBasics.fileEditor(path, key2, amendment2);
+      } catch (Exception e) {
+        System.out.println("Error: " + e);
+      }
+    }
 }
