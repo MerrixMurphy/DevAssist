@@ -1,28 +1,5 @@
-import java.io.File;
-import java.io.FileWriter;
-
 public class BasicReact {
     String path;
-    
-    private void fileCreator(String name, String content){
-        try{
-            File file = new File(path + name);
-            FileWriter writer = new FileWriter(file);
-            writer.write(content);
-            writer.close();
-        }
-        catch(Exception e){
-            System.out.println("Error creating file");
-        }
-    }
-
-    private void dirCreator(String name){
-      try {
-        new File(path + name).mkdir();
-      } catch (Exception e) {
-        System.out.println("Error creating directory");
-      }
-    }
 
     private void lvlOne() {
         try{
@@ -31,7 +8,7 @@ public class BasicReact {
             new Directory("back-end")};
 
           for(Directory d : dir){
-            dirCreator(d.name);
+            Directory.dirCreator(path, d.name);
           }
 
           FileBasics files[] = {
@@ -98,7 +75,7 @@ public class BasicReact {
           };
 
           for(FileBasics f : files){
-            fileCreator(f.name, f.content);
+            FileBasics.fileCreator(path, f.name, f.content);
           }
 
           } catch (Exception e) {
@@ -114,7 +91,7 @@ public class BasicReact {
             new Directory("back-end/src")};
 
           for(Directory d : dir){
-            dirCreator(d.name);
+            Directory.dirCreator(path, d.name);
           }
 
           FileBasics files[] = {
@@ -214,7 +191,7 @@ module.exports = {
               """
                 DATABASE_URL=postgres://
             """),
-            new FileBasics("back-end/package.json", 
+            new FileBasics("front-end/package.json", 
               """
                 {
                   \"name\": \"dynanic-react-app-front-end\",
@@ -263,7 +240,7 @@ module.exports = {
                   }
               }
             """),
-            new FileBasics("back-end/.gitignore", 
+            new FileBasics("front-end/.gitignore", 
               """
                 # dependencies
             /node_modules
@@ -285,7 +262,7 @@ module.exports = {
             yarn-debug.log*
             yarn-error.log*
             """),
-            new FileBasics("back-end/README.md", 
+            new FileBasics("front-end/README.md", 
               """
                 # Dynamic React App Frontend
 
@@ -293,14 +270,14 @@ module.exports = {
                 
                  Summary
             """),
-            new FileBasics("back-end/.env", 
+            new FileBasics("front-end/.env", 
               """
                 REACT_APP_API_BASE_URL=http://localhost:5000
             """)
           };
 
             for(FileBasics f : files){
-              fileCreator(f.name, f.content);
+              FileBasics.fileCreator(path, f.name, f.content);
             }
 
         } catch (Exception e) {
@@ -319,7 +296,7 @@ module.exports = {
             new Directory("back-end/src/validation")};
 
           for(Directory d : dir){
-            dirCreator(d.name);
+            Directory.dirCreator(path, d.name);
           }
 
           FileBasics files[] = {
@@ -453,7 +430,7 @@ function listener() {
               """)};
 
         for(FileBasics f : files){
-          fileCreator(f.name, f.content);
+          FileBasics.fileCreator(path, f.name, f.content);
         }
         } catch (Exception e) {
             System.out.println("Error: " + e);
@@ -465,12 +442,12 @@ function listener() {
           Directory dir[] = {
             new Directory("front-end/src/utils/api"),
             new Directory("front-end/src/layout/images"),
-            new Directory("/front-end/src/components/"),
+            new Directory("/front-end/src/utils/components/"),
             new Directory("./back-end/src/db/migrations"),
             new Directory("./back-end/src/db/seeds")};
 
           for(Directory d : dir){
-            dirCreator(d.name);
+            Directory.dirCreator(path, d.name);
           }
 
           FileBasics files[] = {
@@ -723,7 +700,7 @@ module.exports = knex;
                 """)};
       
                 for(FileBasics f : files){
-                  fileCreator(f.name, f.content);
+                  FileBasics.fileCreator(path, f.name, f.content);
                 }
     } catch (Exception e) {
             System.out.println("Error: " + e);
@@ -800,7 +777,7 @@ seeder();
                 """)};
       
               for(FileBasics f : files){
-                fileCreator(f.name, f.content);
+                FileBasics.fileCreator(path, f.name, f.content);
               }
 } catch (Exception e) {
     System.out.println("Error: " + e);
@@ -818,5 +795,24 @@ seeder();
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
+}
+
+public void addComponent(String url){
+  try{
+    path = url;
+    FileBasics[] files = {
+      new FileBasics("front-end/src/utils/components/component.js","""
+        function form(props) {
+          return \"check\"
+      }
+      
+      export default form;
+          """)};
+          for(FileBasics f : files){
+            FileBasics.fileCreator(path, f.name, f.content);
+          }
+  } catch (Exception e) {
+    System.out.println("Error: " + e);
+  }
 }
 }

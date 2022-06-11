@@ -9,6 +9,7 @@ public class Main {
     }
 
     public static void menu(File path){
+        //Make buttons into more of (4,2 grid)
         JFrame frame = new JFrame("DebAssist");
         Object[] options = {
         "Select Repo", 
@@ -46,22 +47,32 @@ public class Main {
             }
         }
         else if(home == 2){
+            // add folder for main page and main page file edit routes
             JOptionPane.showMessageDialog(frame,"New Main Page");
             menu(path);
         }
         else if(home == 3){
+            // add sub page file to main page folder edit routes
             JOptionPane.showMessageDialog(frame,"New Sub Page");
             menu(path);
         }
         else if(home == 4){
-            JOptionPane.showMessageDialog(frame,"New Component");
-            menu(path);
+            String repo = (String)JOptionPane.showInputDialog(frame,"New Component","DebAssist",JOptionPane.PLAIN_MESSAGE,null, null, null);
+            if ((repo != null) && (repo.length() > 0)) {
+                BasicReact reactapp = new BasicReact();
+                reactapp.addComponent(path.toString()+"/");
+                menu(path);            
+            } else {
+                menu(path);
+            }
         }
         else if(home == 5){
+            //edit nav file link to "/" choose between internal and external link
             JOptionPane.showMessageDialog(frame,"New Nav Option");
             menu(path);
         }
         else if(home == 6){
+            //edit footer file and link to "/". choose between internal and external link
             JOptionPane.showMessageDialog(frame,"New Footer Option");
             menu(path);
         }
@@ -69,5 +80,7 @@ public class Main {
             JOptionPane.showMessageDialog(frame,"New Table");
             menu(path);
         }
+
+        //maybe api later
     }
 }
