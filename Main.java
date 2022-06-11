@@ -20,7 +20,6 @@ public class Main {
         "New Footer Option", 
         "New Table",
     };
-    System.out.println(path);
         int home = JOptionPane.showOptionDialog(frame,"Selected Repo: " + path.toString().substring(0),"DebAssist", JOptionPane.DEFAULT_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[7]);
         
         if(home == 0){

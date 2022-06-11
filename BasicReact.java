@@ -4,73 +4,103 @@ import java.io.FileWriter;
 public class BasicReact {
     String path;
     
+    private void fileCreator(String name, String content){
+        try{
+            File file = new File(path + name);
+            FileWriter writer = new FileWriter(file);
+            writer.write(content);
+            writer.close();
+        }
+        catch(Exception e){
+            System.out.println("Error creating file");
+        }
+    }
+
+    private void dirCreator(String name){
+      try {
+        new File(path + name).mkdir();
+      } catch (Exception e) {
+        System.out.println("Error creating directory");
+      }
+    }
+
     private void lvlOne() {
         try{
-        new File(path + "front-end").mkdir();
-        new File(path + "back-end").mkdir();
-        FileWriter gitignore = new FileWriter (path + ".gitignore");
-        gitignore.write("""
-            # dependencies
-            node_modules/
-            .pnp/
-            .pnp.js
-            
-            # production
-            build/
-            
-            # misc
-            .eslintcache
-            .DS_Store
-            .env
-            .env.*
-            .idea/
-            .vscode/
-            .vercel
-            .screenshots/
-            
-            npm-debug.log*
-            yarn-debug.log*
-            yarn-error.log*  
-                """);
-        gitignore.close();
-        FileWriter readme = new FileWriter (path + "README.md");
-        readme.write("""
-            # Dynamic React App
+          Directory dir[] = {
+            new Directory("front-end"),
+            new Directory("back-end")};
 
-            ## Current Status: Development
-            
-             Summary
-                """);
-        readme.close();
-        FileWriter packagejson = new FileWriter (path + "package.json");
-        packagejson.write("""
-        {
-            \"name\": \"dynamic-react-app\",
-            \"version\": \"1.0.0\",
-            \"description\": \"dynamic description\",
-            \"private\": true,
-            \"repository\": {
-                \"type\": \"git\",
-                \"url\": \"https://github.com/MerrixMurphy/dynamic-react-app\"
-            },
-            \"scripts\": {
-                \"build\": \"npm -prefix front-end run build\",
-                \"preinstall\": \"cd ./back-end && npm install\",
-                \"install\": \"cd ./front-end && npm install\",
-                \"start\": \"npx concurrently 'npm run start:backend' 'npm run start:frontend'\",
-                \"start:backend\": \"npm --prefix ./back-end start\",
-                \"start:frontend\": \"npm --prefix ./front-end start\",
-                \"start:dev\": \"npx concurrently \"npm run start:dev --prefix ./back-end\" \"npm start --prefix ./front-end\" \"
-            },
-            \"keywords\": [],
-            \"author\": \"Merrix Murphy\",
-            \"license\": \"UNLICENSED\",
-            \"dependencies\": {
-                \"node-fetch\": \"^3.2.4\"
-            }
-        }
-        """);
-        packagejson.close();
+          for(Directory d : dir){
+            dirCreator(d.name);
+          }
+
+          FileBasics files[] = {
+            new FileBasics(".gitignore", 
+            """
+              # dependencies
+              node_modules/
+              .pnp/
+              .pnp.js
+              
+              # production
+              build/
+              
+              # misc
+              .eslintcache
+              .DS_Store
+              .env
+              .env.*
+              .idea/
+              .vscode/
+              .vercel
+              .screenshots/
+              
+              npm-debug.log*
+              yarn-debug.log*
+              yarn-error.log*  
+                  """),
+            new FileBasics("package.json", 
+            """
+              {
+                  \"name\": \"dynamic-react-app\",
+                  \"version\": \"1.0.0\",
+                  \"description\": \"dynamic description\",
+                  \"private\": true,
+                  \"repository\": {
+                      \"type\": \"git\",
+                      \"url\": \"https://github.com/MerrixMurphy/dynamic-react-app\"
+                  },
+                  \"scripts\": {
+                      \"build\": \"npm -prefix front-end run build\",
+                      \"preinstall\": \"cd ./back-end && npm install\",
+                      \"install\": \"cd ./front-end && npm install\",
+                      \"start\": \"npx concurrently 'npm run start:backend' 'npm run start:frontend'\",
+                      \"start:backend\": \"npm --prefix ./back-end start\",
+                      \"start:frontend\": \"npm --prefix ./front-end start\",
+                      \"start:dev\": \"npx concurrently \"npm run start:dev --prefix ./back-end\" \"npm start --prefix ./front-end\" \"
+                  },
+                  \"keywords\": [],
+                  \"author\": \"Merrix Murphy\",
+                  \"license\": \"UNLICENSED\",
+                  \"dependencies\": {
+                      \"node-fetch\": \"^3.2.4\"
+                  }
+              }
+              """), 
+              new FileBasics("README.md", 
+              """
+              # Dynamic React App
+  
+              ## Current Status: Development
+              
+               Summary
+            """)
+          };
+
+          for(FileBasics f : files){
+            fileCreator(f.name, f.content);
+          }
+
           } catch (Exception e) {
             System.out.println("Error: " + e);
         }
@@ -78,51 +108,56 @@ public class BasicReact {
 
     private void lvlTwo() {
         try {
-            new File(path + "front-end/src").mkdir();
-            new File(path + "front-end/public").mkdir();
-            new File(path + "back-end/src").mkdir();
-            FileWriter back_packagejson = new FileWriter (path + "back-end/package.json");
-            back_packagejson.write("""
-                {
-                    \"name\": \"dynamic-react-app-back-end\",
-                    \"version\": \"1.0.0\",
-                    \"description\": \"dynamic react app backend.\",
-                    \"main\": \"src/server.js\",
-                    \"repository\": {
-                        \"type\": \"git\",
-                        \"url\": \"https://github.com/MerrixMurphy/dynamic-react-app\",
-                        \"directory\": \"/back-end\"
-                    },
-                    \"scripts\": {
-                        \"start\": \"node src/server.js\",
-                        \"start:dev\": \"nodemon src/server.js\"
-                    },
-                    \"keywords\": [],
-                    \"author\": \"Merrix Murphy\",
-                    \"license\": \"UNLICENSED\",
-                    \"dependencies\": {
-                        \"cors\": \"^2.8.5\",
-                        \"dotenv\": \"^16.0.0\",
-                        \"express\": \"^4.17.3\",
-                        \"knex\": \"^1.0.4\",
-                        \"nanoid\": \"^3.3.2\",
-                        \"node-fetch\": \"^3.2.3\",
-                        \"npm-run-all\": \"^4.1.5\",
-                        \"pg\": \"^8.7.3\",
-                        \"pino\": \"^7.9.2\",
-                        \"pino-http\": \"^6.6.0\",
-                        \"pino-pretty\": \"^7.6.0\"
-                    },
-                    \"devDependencies\": {
-                        \"nodemon\": \"^2.0.15\"
-                    }
-                }
+          Directory dir[] = {
+            new Directory("front-end/src"),
+            new Directory("front-end/public"),
+            new Directory("back-end/src")};
 
-        """);
-        back_packagejson.close();
-        FileWriter back_gitignore = new FileWriter (path + "back-end/.gitignore");
-        back_gitignore.write("""
-            # dependencies
+          for(Directory d : dir){
+            dirCreator(d.name);
+          }
+
+          FileBasics files[] = {
+            new FileBasics("back-end/package.json", 
+            """
+              {
+                \"name\": \"dynamic-react-app-back-end\",
+                \"version\": \"1.0.0\",
+                \"description\": \"dynamic react app backend.\",
+                \"main\": \"src/server.js\",
+                \"repository\": {
+                    \"type\": \"git\",
+                    \"url\": \"https://github.com/MerrixMurphy/dynamic-react-app\",
+                    \"directory\": \"/back-end\"
+                },
+                \"scripts\": {
+                    \"start\": \"node src/server.js\",
+                    \"start:dev\": \"nodemon src/server.js\"
+                },
+                \"keywords\": [],
+                \"author\": \"Merrix Murphy\",
+                \"license\": \"UNLICENSED\",
+                \"dependencies\": {
+                    \"cors\": \"^2.8.5\",
+                    \"dotenv\": \"^16.0.0\",
+                    \"express\": \"^4.17.3\",
+                    \"knex\": \"^1.0.4\",
+                    \"nanoid\": \"^3.3.2\",
+                    \"node-fetch\": \"^3.2.3\",
+                    \"npm-run-all\": \"^4.1.5\",
+                    \"pg\": \"^8.7.3\",
+                    \"pino\": \"^7.9.2\",
+                    \"pino-http\": \"^6.6.0\",
+                    \"pino-pretty\": \"^7.6.0\"
+                },
+                \"devDependencies\": {
+                    \"nodemon\": \"^2.0.15\"
+                }
+            }
+                  """),
+            new FileBasics("back-end/.gitignore", 
+            """
+              # dependencies
 /node_modules
 /.pnp
 .pnp.js
@@ -141,20 +176,18 @@ public class BasicReact {
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-                """);
-                back_gitignore.close();
-        FileWriter back_readme = new FileWriter (path + "back-end/README.md");
-        back_readme.write("""
-            # Dynamic React App Backend
+              """), 
+              new FileBasics("back-end/README.md", 
+              """
+                # Dynamic React App Backend
 
-            ## Current Status: Development
-            
-             Summary
-                """);
-                back_readme.close();
-        FileWriter back_knexfile = new FileWriter (path + "back-end/knexfile.js");
-        back_knexfile.write("""
-            require(\"dotenv\").config();
+                ## Current Status: Development
+                
+                 Summary
+            """),
+            new FileBasics("back-end/knexfile.js", 
+              """
+                require(\"dotenv\").config();
 const path = require(\"path\");
 
 const {
@@ -176,66 +209,63 @@ module.exports = {
     debug: !!DEBUG,
   },
 };
-                    """);
-                    back_knexfile.close();
-        FileWriter back_env = new FileWriter (path + "back-end/.env");
-        back_env.write("""
-            DATABASE_URL=postgres://
-            """);
-            back_env.close();
-            FileWriter front_packagejson = new FileWriter (path + "back-end/package.json");
-            front_packagejson.write("""
+            """),
+            new FileBasics("back-end/.env", 
+              """
+                DATABASE_URL=postgres://
+            """),
+            new FileBasics("back-end/package.json", 
+              """
                 {
-                \"name\": \"dynanic-react-app-front-end\",
-                \"version\": \"1.0.0\",
-                \"description\": \"dynamic react app frontend.\",
-                \"main\": \"src/index.js\",
-                \"repository\": {
-                    \"type\": \"git\",
-                    \"url\": \"https://github.com/MerrixMurphy/dynamic-react-app\",
-                    \"directory\": \"/front-end\"
-                },
-                \"private\": true,
-                \"dependencies\": {
-                    \"react\": \"^17.0.2\",
-                    \"react-dom\": \"^17.0.2\",
-                    \"react-router\": \"^6.2.2\",
-                    \"react-router-dom\": \"^6.2.2\",
-                    \"react-scripts\": \"^5.0.1\",
-                    \"web-vitals\": \"^2.1.4\"
-                },
-                \"scripts\": {
-                    \"build\": \"react-scripts build\",
-                    \"eject\": \"react-scripts eject\",
-                    \"start\": \"react-scripts start\"
-                },
-                \"eslintConfig\": {
-                    \"extends\": [
-                        \"react-app\"
-                    ]
-                },
-                \"browserslist\": {
-                    \"production\": [
-                        \">0.2%\",
-                        \"not dead\",
-                        \"not op_mini all\"
-                    ],
-                    \"development\": [
-                        \"last 1 chrome version\",
-                        \"last 1 firefox version\",
-                        \"last 1 safari version\"
-                    ]
-                },
-                \"devDependencies\": {
-                    \"cross-fetch\": \"^3.1.5\",
-                    \"npm-run-all\": \"^4.1.5\"
-                }
-            }
-        """);
-        front_packagejson.close();
-        FileWriter front_gitignore = new FileWriter (path + "back-end/.gitignore");
-        front_gitignore.write("""
-            # dependencies
+                  \"name\": \"dynanic-react-app-front-end\",
+                  \"version\": \"1.0.0\",
+                  \"description\": \"dynamic react app frontend.\",
+                  \"main\": \"src/index.js\",
+                  \"repository\": {
+                      \"type\": \"git\",
+                      \"url\": \"https://github.com/MerrixMurphy/dynamic-react-app\",
+                      \"directory\": \"/front-end\"
+                  },
+                  \"private\": true,
+                  \"dependencies\": {
+                      \"react\": \"^17.0.2\",
+                      \"react-dom\": \"^17.0.2\",
+                      \"react-router\": \"^6.2.2\",
+                      \"react-router-dom\": \"^6.2.2\",
+                      \"react-scripts\": \"^5.0.1\",
+                      \"web-vitals\": \"^2.1.4\"
+                  },
+                  \"scripts\": {
+                      \"build\": \"react-scripts build\",
+                      \"eject\": \"react-scripts eject\",
+                      \"start\": \"react-scripts start\"
+                  },
+                  \"eslintConfig\": {
+                      \"extends\": [
+                          \"react-app\"
+                      ]
+                  },
+                  \"browserslist\": {
+                      \"production\": [
+                          \">0.2%\",
+                          \"not dead\",
+                          \"not op_mini all\"
+                      ],
+                      \"development\": [
+                          \"last 1 chrome version\",
+                          \"last 1 firefox version\",
+                          \"last 1 safari version\"
+                      ]
+                  },
+                  \"devDependencies\": {
+                      \"cross-fetch\": \"^3.1.5\",
+                      \"npm-run-all\": \"^4.1.5\"
+                  }
+              }
+            """),
+            new FileBasics("back-end/.gitignore", 
+              """
+                # dependencies
             /node_modules
             /.pnp
             .pnp.js
@@ -254,22 +284,25 @@ module.exports = {
             npm-debug.log*
             yarn-debug.log*
             yarn-error.log*
-                """);
-                front_gitignore.close();
-        FileWriter front_readme = new FileWriter (path + "back-end/README.md");
-        front_readme.write("""
-            # Dynamic React App Frontend
+            """),
+            new FileBasics("back-end/README.md", 
+              """
+                # Dynamic React App Frontend
 
-            ## Current Status: Development
-            
-             Summary
-                """);
-                front_readme.close();
-        FileWriter front_env = new FileWriter (path + "back-end/.env");
-        front_env.write("""
-            REACT_APP_API_BASE_URL=http://localhost:5000
-            """);
-            front_env.close();
+                ## Current Status: Development
+                
+                 Summary
+            """),
+            new FileBasics("back-end/.env", 
+              """
+                REACT_APP_API_BASE_URL=http://localhost:5000
+            """)
+          };
+
+            for(FileBasics f : files){
+              fileCreator(f.name, f.content);
+            }
+
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
@@ -277,15 +310,21 @@ module.exports = {
 
     private void lvlThree() {
         try {
-            new File(path + "front-end/src/layout").mkdir();
-            new File(path + "front-end/src/utils").mkdir();
-            new File(path + "front-end/src/home").mkdir();
-            new File(path + "back-end/src/db").mkdir();
-            new File(path + "back-end/src/error").mkdir();
-            new File(path + "back-end/src/validation").mkdir();
-            FileWriter front_app = new FileWriter (path + "front-end/src/App.js");
-            front_app.write("""
-                import React from 'react';
+          Directory dir[] = {
+            new Directory("front-end/src/layout"),
+            new Directory("front-end/src/utils"),
+            new Directory("front-end/src/home"),
+            new Directory("back-end/src/db"),
+            new Directory("back-end/src/error"),
+            new Directory("back-end/src/validation")};
+
+          for(Directory d : dir){
+            dirCreator(d.name);
+          }
+
+          FileBasics files[] = {
+            new FileBasics("front-end/src/App.js","""
+              import React from 'react';
             import { Route, Routes } from 'react-router-dom';
             import Layout from \"./layout/layout\";
             
@@ -298,11 +337,9 @@ module.exports = {
             }
             
             export default App;
-            """);
-            front_app.close();
-            FileWriter front_index = new FileWriter (path + "front-end/src/index.js");
-            front_index.write("""
-                import React from 'react';
+                """),
+            new FileBasics("front-end/src/index.js","""
+              import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import App from './App';
@@ -317,11 +354,9 @@ ReactDOM.render(
     </React.StrictMode>,
     document.getElementById('root')
 );
-""");
-front_index.close();
-FileWriter front_html = new FileWriter (path + "front-end/public/index.html");
-front_html.write("""
-    <!DOCTYPE html>
+              """),
+            new FileBasics("front-end/public/index.html","""
+              <!DOCTYPE html>
 <html lang=\"en\">
   <head>
     <meta charset=\"utf-8\" />
@@ -369,11 +404,9 @@ front_html.write("""
     <div id=\"root\"></div>
   </body>
 </html>
-        """);
-        front_html.close();
-        FileWriter back_app = new FileWriter (path + "back-end/src/app.js");
-        back_app.write("""
-            const path = require(\"path\");
+              """),
+            new FileBasics("back-end/src/app.js","""
+              const path = require(\"path\");
 
             require(\"dotenv\").config({ path: path.join(__dirname, "..", ".env") });
             
@@ -396,11 +429,9 @@ front_html.write("""
             app.use(errorHandler);
             
             module.exports = app;
-                """);
-        back_app.close();
-        FileWriter back_server = new FileWriter (path + "back-end/src/server.js");
-        back_server.write("""
-            const { PORT = 5000 } = process.env;
+              """),
+            new FileBasics("back-end/src/server.js","""
+              const { PORT = 5000 } = process.env;
 
 const app = require(\"./app\");
 const knex = require(\"./db/connection\");
@@ -419,8 +450,11 @@ knex.migrate
 function listener() {
   console.log(`Listening on Port ${PORT}!`);
 }
-                """);
-        back_server.close();
+              """)};
+
+        for(FileBasics f : files){
+          fileCreator(f.name, f.content);
+        }
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
@@ -428,14 +462,20 @@ function listener() {
 
     private void lvlFour() {
         try{
-        new File(path + "front-end/src/utils/api").mkdir();
-        new File(path + "front-end/src/layout/images").mkdir();
-        new File(path + "/front-end/src/components/").mkdir();
-        new File(path + "./back-end/src/db/migrations").mkdir();
-        new File(path + "./back-end/src/db/seeds").mkdir();
-    FileWriter home = new FileWriter (path + "front-end/src/home/Home.js");
-    home.write("""
-        import React from \"react\";
+          Directory dir[] = {
+            new Directory("front-end/src/utils/api"),
+            new Directory("front-end/src/layout/images"),
+            new Directory("/front-end/src/components/"),
+            new Directory("./back-end/src/db/migrations"),
+            new Directory("./back-end/src/db/seeds")};
+
+          for(Directory d : dir){
+            dirCreator(d.name);
+          }
+
+          FileBasics files[] = {
+            new FileBasics("front-end/src/home/Home.js","""
+              import React from \"react\";
         import { Link } from \"react-router-dom\";
         
         function Home() {
@@ -448,11 +488,9 @@ function listener() {
         }
         
         export default Home;
-            """);
-    home.close();
-    FileWriter css = new FileWriter (path + "front-end/src/layout/layout.css");
-    css.write("""
-        @import url(\"https://fonts.googleapis.com/css2?family=Anton&display=swap\");
+                """),
+            new FileBasics("front-end/src/layout/layout.css","""
+              @import url(\"https://fonts.googleapis.com/css2?family=Anton&display=swap\");
 
 a {
   display: inline-block;
@@ -537,33 +575,29 @@ footer {
     padding: 0px 15px 0px 15px;
   }
 }
-            """);
-    css.close();
-    FileWriter layout = new FileWriter (path + "front-end/src/layout/layout.js");
-    layout.write("""
-        import React from \"react\";
-import Nav from \"./nav\";
-import Routing from \"./routes\";
-import Footer from \"./footer\";
-
-import \"./layout.css\";
-
-function Layout() {
-  return (
-    <div>
-      <Nav />
-      <Routing />
-      <Footer />
-      </div>
-  );
-}
-
-export default Layout;
-            """);
-            layout.close();
-    FileWriter routes = new FileWriter (path + "front-end/src/layout/routes.js");
-    routes.write("""
-        import React from 'react';
+                """),
+            new FileBasics("front-end/src/layout/layout.js","""
+              import React from \"react\";
+              import Nav from \"./nav\";
+              import Routing from \"./routes\";
+              import Footer from \"./footer\";
+              
+              import \"./layout.css\";
+              
+              function Layout() {
+                return (
+                  <div>
+                    <Nav />
+                    <Routing />
+                    <Footer />
+                    </div>
+                );
+              }
+              
+              export default Layout;
+                """),
+            new FileBasics("front-end/src/layout/routes.js","""
+              import React from 'react';
 import { Navigate, Route, Routes } from \"react-router-dom\";
 
 import Home from '../home/home';
@@ -580,11 +614,9 @@ function Routing() {
 }
 
 export default Routing;
-            """);
-            routes.close();
-    FileWriter front_notFound = new FileWriter (path + "front-end/src/layout/notFound.js");
-    front_notFound.write("""
-        import React from 'react';
+                """),
+            new FileBasics("front-end/src/layout/notFound.js","""
+              import React from 'react';
 
 function NotFound() {
     return (
@@ -598,11 +630,9 @@ function NotFound() {
 }
 
 export default NotFound;
-            """);
-            front_notFound.close();
-    FileWriter nav = new FileWriter (path + "front-end/src/layout/nav.js");
-    nav.write("""
-        import React from 'react';
+                """),
+            new FileBasics("front-end/src/layout/nav.js","""
+              import React from 'react';
 import { Link } from 'react-router-dom';
 
 function nav() {
@@ -623,11 +653,9 @@ function nav() {
 }
 
 export default nav
-            """);
-            nav.close();
-    FileWriter footer = new FileWriter (path + "front-end/src/layout/footer.js");
-    footer.write("""
-        import React from 'react'
+                """),
+            new FileBasics("front-end/src/layout/footer.js","""
+              import React from 'react'
 import { Link } from 'react-router-dom';
 
 function footer() {
@@ -639,73 +667,64 @@ function footer() {
 }
 
 export default footer
-            """);
-            footer.close();
-    FileWriter validations = new FileWriter (path + "back-end/src/validation/validations.js");
-    validations.write("""
-module.exports = {
-}
-                """);
-                validations.close();
-            FileWriter asyncErrorBoundary = new FileWriter (path + "back-end/src/error/asyncErrorBoundary.js");
-            asyncErrorBoundary.write("""
-                function asyncErrorBoundary(delegate, defaultStatus) {
-                    return (request, response, next) => {
-                      Promise.resolve()
-                        .then(() => delegate(request, response, next))
-                        .catch((error = {}) => {
-                          const { status = defaultStatus, message = error } = error;
-                          next({
-                            status,
-                            message,
-                          });
-                        });
-                    };
-                  }
-                  
-                  module.exports = asyncErrorBoundary;
-                """);
-                asyncErrorBoundary.close();
-            FileWriter errorHandler = new FileWriter (path + "back-end/src/error/errorHandler.js");
-            errorHandler.write("""
-                function errorHandler(error, request, response, next) {
-                    const { status = 500, message = \"Something went wrong!\" } = error;
-                    response.status(status).json({ error: message });
-                  }
-                  
-                  module.exports = errorHandler;
-                """);
-                errorHandler.close();
-            FileWriter methodNotAllowed = new FileWriter (path + "back-end/src/error/methodNotAllowed.js");
-            methodNotAllowed.write("""
-                function methodNotAllowed(req, res, next) {
-                    next({
-                      status: 405,
-                      message: `${req.method} not allowed for ${req.originalUrl}`,
+                """),
+            new FileBasics("back-end/src/validation/validations.js","""
+              module.exports = {
+              }
+                """),
+            new FileBasics("back-end/src/error/asyncErrorBoundary.js","""
+              function asyncErrorBoundary(delegate, defaultStatus) {
+                return (request, response, next) => {
+                  Promise.resolve()
+                    .then(() => delegate(request, response, next))
+                    .catch((error = {}) => {
+                      const { status = defaultStatus, message = error } = error;
+                      next({
+                        status,
+                        message,
+                      });
                     });
-                  }
-                  
-                  module.exports = methodNotAllowed;
-                """);
-                methodNotAllowed.close();
-            FileWriter back_notFound = new FileWriter (path + "back-end/src/error/notFound.js");
-            back_notFound.write("""
-                function notFound(req, res, next) {
-                    next({ status: 404, message: `Path not found: ${req.originalUrl}` });
-                  }
-                  
-                  module.exports = notFound;
-                """);
-                back_notFound.close();
-            FileWriter connection = new FileWriter (path + "back-end/src/db/connection.js");
-            connection.write("""
-                const environment = process.env.NODE_ENV || \"development\";
+                };
+              }
+              
+              module.exports = asyncErrorBoundary;
+                """),
+            new FileBasics("back-end/src/error/errorHandler.js","""
+              function errorHandler(error, request, response, next) {
+                const { status = 500, message = \"Something went wrong!\" } = error;
+                response.status(status).json({ error: message });
+              }
+              
+              module.exports = errorHandler;
+                """),
+            new FileBasics("back-end/src/error/methodNotAllowed.js","""
+              function methodNotAllowed(req, res, next) {
+                next({
+                  status: 405,
+                  message: `${req.method} not allowed for ${req.originalUrl}`,
+                });
+              }
+              
+              module.exports = methodNotAllowed;
+                """),
+            new FileBasics("back-end/src/error/notFound.js","""
+              function notFound(req, res, next) {
+                next({ status: 404, message: `Path not found: ${req.originalUrl}` });
+              }
+              
+              module.exports = notFound;
+                """),
+            new FileBasics("back-end/src/db/connection.js","""
+              const environment = process.env.NODE_ENV || \"development\";
 const config = require(\"../../knexfile\")[environment];
 const knex = require(\"knex\")(config);
 
 module.exports = knex;
-                """);
-                connection.close();
+                """)};
+      
+                for(FileBasics f : files){
+                  fileCreator(f.name, f.content);
+                }
     } catch (Exception e) {
             System.out.println("Error: " + e);
         }
@@ -713,18 +732,17 @@ module.exports = knex;
 
     private void lvlFive() {
         try{
-        FileWriter api = new FileWriter (path + "front-end/src/utils/api/api.js");
-    api.write("""
-        const API_BASE_URL = 
+
+            FileBasics[] files = {
+            new FileBasics("front-end/src/utils/api/api.js","""
+              const API_BASE_URL = 
       process.env.REACT_APP_API_BASE_URL || \"http://localhost:5000\";
 
 const headers = new Headers();
 headers.append(\"Content-Type\", \"application/json\");
-                """);
-    api.close();
-    FileWriter jsonCreator = new FileWriter (path + "back-end/src/db/seeds/jsonCreator.js");
-    jsonCreator.write("""
-        import fetch from \"node-fetch\";
+                """),
+            new FileBasics("back-end/src/db/seeds/jsonCreator.js","""
+              import fetch from \"node-fetch\";
 import fs from \"fs\";
 /*
 Dynamic Summary
@@ -779,8 +797,11 @@ const seeder = async () => {
 };
 
 seeder();
-              """);
-              jsonCreator.close();
+                """)};
+      
+              for(FileBasics f : files){
+                fileCreator(f.name, f.content);
+              }
 } catch (Exception e) {
     System.out.println("Error: " + e);
     }
