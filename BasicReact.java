@@ -158,7 +158,7 @@ yarn-error.log*
 const path = require(\"path\");
 
 const {
-  DATABASE_URL = \"postgres://lwcxmhna:dynamic@heffalump.db.elephantsql.com/lwcxmhna\",
+  DATABASE_URL = \"postgres:/\",
   DEBUG,
 } = process.env;
 
@@ -180,7 +180,7 @@ module.exports = {
                     back_knexfile.close();
         FileWriter back_env = new FileWriter (path + "back-end/.env");
         back_env.write("""
-            DATABASE_URL=postgres://lwcxmhna:dynamic@heffalump.db.elephantsql.com/lwcxmhna
+            DATABASE_URL=postgres://
             """);
             back_env.close();
             FileWriter front_packagejson = new FileWriter (path + "back-end/package.json");
