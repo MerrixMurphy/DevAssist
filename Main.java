@@ -45,7 +45,7 @@ public class Main {
                 String description = (String)JOptionPane.showInputDialog(frame,"New Description","DebAssist",JOptionPane.PLAIN_MESSAGE,null, null, null);
                 if ((description != null) && (description.length() > 0)) {
                 BasicReact reactapp = new BasicReact();
-                path = new File("../", repo);
+                path = new File("../", repo.replaceAll(" ", "-"));
                 new File(path.toString()).mkdir();
                 reactapp.treeBuilder(path.toString()+"/", repo, description);
                 menu(path);
@@ -57,6 +57,7 @@ public class Main {
             }
         }
         else if(home == 2){
+            if (!path.toString().equals("..")){
             String repo = (String)JOptionPane.showInputDialog(frame,"New Main Page","DebAssist",JOptionPane.PLAIN_MESSAGE,null, null, null);
             if ((repo != null) && (repo.length() > 0)) {
                 BasicReact reactapp = new BasicReact();
@@ -65,19 +66,34 @@ public class Main {
             } else {
                 menu(path);
             }
+        } else {
+            JOptionPane.showMessageDialog(frame,"No Repo Selected","DebAssist",JOptionPane.PLAIN_MESSAGE,null);
+            menu(path);
         }
+    }
         else if(home == 3){
-            path = new File(path+"frontend/src/");
-            String[] excludeStrings = {"home", "layout", "utils", "App.js", "'index.js", ".env", ".gitignore", "README.md", "package.json"};
+            if (!path.toString().equals("..")){
+            path = new File(path+"/front-end/src/");
+            String[] excludeStrings = {"home", "layout", "utils", "App.js", "index.js"};
             Object[] availablePages = path.list();
-            for(int i = 0; i < availablePages.length; i++){
-                for(int j = 0; j < excludeStrings.length; j++){
-                    if(availablePages[i].toString().equals(excludeStrings[j])){
+            Object[] copy = new Object[availablePages.length - 5];
+
+            for(int j = 0; j < excludeStrings.length; j++){
+                for(int i = 0; i < availablePages.length-1; i++){
+                    if(availablePages[i] != null){
+                    if(excludeStrings[j].equals(availablePages[i].toString())){
                         availablePages[i] = null;
                     }
                 }
+                }
             }
-            String main = (String)JOptionPane.showInputDialog(frame,"Select Main Page","DebAssist",JOptionPane.PLAIN_MESSAGE,null,availablePages,availablePages[0]);
+            for(int i = 0, j = 0; i < availablePages.length-1; i++){
+                if(availablePages[i] != null){
+                    copy[j++] = availablePages[i];
+                }
+            }
+            if (copy.length > 0) {
+            String main = (String)JOptionPane.showInputDialog(frame,"Select Main Page","DebAssist",JOptionPane.PLAIN_MESSAGE,null,copy,copy[0]);
             if ((main != null) && (main.length() > 0)) {
                 String sub = (String)JOptionPane.showInputDialog(frame,"New Sub Page","DebAssist",JOptionPane.PLAIN_MESSAGE,null, null, null);
                 if ((sub != null) && (sub.length() > 0)) {
@@ -90,8 +106,17 @@ public class Main {
             } else {
                 menu(path);
             }
+        } else {
+            JOptionPane.showMessageDialog(frame,"No Main Pages Available","DebAssist",JOptionPane.PLAIN_MESSAGE,null);
+            menu(path);
+        }
+        } else {
+            JOptionPane.showMessageDialog(frame,"No Repo Selected","DebAssist",JOptionPane.PLAIN_MESSAGE,null);
+            menu(path);
+        }
         }
         else if(home == 4){
+            if (!path.toString().equals("..")){
             String repo = (String)JOptionPane.showInputDialog(frame,"New Component","DebAssist",JOptionPane.PLAIN_MESSAGE,null, null, null);
             if ((repo != null) && (repo.length() > 0)) {
                 BasicReact reactapp = new BasicReact();
@@ -100,8 +125,13 @@ public class Main {
             } else {
                 menu(path);
             }
+        } else {
+            JOptionPane.showMessageDialog(frame,"No Repo Selected","DebAssist",JOptionPane.PLAIN_MESSAGE,null);
+            menu(path);
+        }
         }
         else if(home == 5){
+            if (!path.toString().equals("..")){
             String repo = (String)JOptionPane.showInputDialog(frame,"New Nav Option","DebAssist",JOptionPane.PLAIN_MESSAGE,null, null, null);
             if ((repo != null) && (repo.length() > 0)) {
                 BasicReact reactapp = new BasicReact();
@@ -110,8 +140,13 @@ public class Main {
             } else {
                 menu(path);
             }
+        } else {
+            JOptionPane.showMessageDialog(frame,"No Repo Selected","DebAssist",JOptionPane.PLAIN_MESSAGE,null);
+            menu(path);
+        }
         }
         else if(home == 6){
+            if (!path.toString().equals("..")){
             String repo = (String)JOptionPane.showInputDialog(frame,"New Footer Option","DebAssist",JOptionPane.PLAIN_MESSAGE,null, null, null);
             if ((repo != null) && (repo.length() > 0)) {
                 int linkType = JOptionPane.showOptionDialog(frame,"Selected Repo: " + path.toString().substring(0),"DebAssist", JOptionPane.DEFAULT_OPTION,JOptionPane.PLAIN_MESSAGE,null,in_ex,in_ex[1]);
@@ -121,11 +156,20 @@ public class Main {
             } else {
                 menu(path);
             }
+        } else {
+            JOptionPane.showMessageDialog(frame,"No Repo Selected","DebAssist",JOptionPane.PLAIN_MESSAGE,null);
+            menu(path);
+        }
         }
         else if(home == 7){
+            if (!path.toString().equals("..")){
             //add table folder with router controller and service, edit app, create seed, run seed and edit migration file, edit jsonCreator
             JOptionPane.showMessageDialog(frame,"New Table");
             menu(path);
+        } else {
+            JOptionPane.showMessageDialog(frame,"No Repo Selected","DebAssist",JOptionPane.PLAIN_MESSAGE,null);
+            menu(path);
+        }
         }
 
         //maybe api later

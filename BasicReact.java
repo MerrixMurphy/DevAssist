@@ -1,21 +1,22 @@
 public class BasicReact {
     String path;
-    String name;
     
     private String[] customFileNameFormatter(String name){
       String fileName = null;
-      String[] splitCaps = null;
+      String capitalName = null;
 
       if (name.contains(" ")){
-        fileName = name.replaceAll(" ", "_");
-        splitCaps = name.split(" ");
+        fileName = name.replaceAll(" ", "").replaceAll("-", "");
+        String[] splitCaps = name.split(" ");
+        for(int i = 0; i < splitCaps.length; i++){
+          splitCaps[i] = splitCaps[i].substring(0, 1).toUpperCase() + splitCaps[i].substring(1);
+        }
+  
+        capitalName = String.join(" ", splitCaps);
+      } else {
+          capitalName = name.substring(0, 1).toUpperCase() + name.substring(1);
       }
 
-      for(int i = 0; i < splitCaps.length; i++){
-        splitCaps[i] = splitCaps[i].substring(0, 1).toUpperCase() + splitCaps[i].substring(1);
-      }
-
-      String capitalName = String.join(" ", splitCaps);
       String[] formattedNames = {fileName, capitalName};
       return formattedNames;
     }
@@ -26,7 +27,6 @@ public class BasicReact {
           Directory dir[] = {
             new Directory("front-end"),
             new Directory("back-end")};
-
           for(Directory d : dir){
             Directory.dirCreator(path, d.name);
           }
@@ -83,7 +83,7 @@ public class BasicReact {
                       \"node-fetch\": \"^3.2.4\"
                   }
               }
-              """.replaceAll("dynamic-react-app", formattedNames[0]).replaceAll("description", description)), 
+              """.replaceAll("dynamic-react-app", formattedNames[0] != null ? formattedNames[0] : name).replaceAll("description", description)), 
               new FileBasics("README.md", 
               """
               # Dynamic React App
@@ -152,7 +152,7 @@ public class BasicReact {
                     \"nodemon\": \"^2.0.15\"
                 }
             }
-                  """.replaceAll("dynamic-react-app", formattedNames[0]).replaceAll("dynamic react app", name)),
+                  """.replaceAll("dynamic-react-app", formattedNames[0] != null ? formattedNames[0] : name).replaceAll("dynamic react app", name)),
             new FileBasics("back-end/.gitignore", 
             """
               # dependencies
@@ -260,7 +260,7 @@ module.exports = {
                       \"npm-run-all\": \"^4.1.5\"
                   }
               }
-            """.replaceAll("dynamic-react-app", formattedNames[0]).replaceAll("dynamic react app", name)),
+            """.replaceAll("dynamic-react-app", formattedNames[0] != null ? formattedNames[0] : name).replaceAll("dynamic react app", name)),
             new FileBasics("front-end/.gitignore", 
               """
                 # dependencies
@@ -296,11 +296,9 @@ module.exports = {
                 REACT_APP_API_BASE_URL=http://localhost:5000
             """)
           };
-
             for(FileBasics f : files){
               FileBasics.fileCreator(path, f.name, f.content);
             }
-
         } catch (Exception e) {
             System.out.println("Error: " + e);
         }
@@ -798,7 +796,7 @@ seeder();
     public void treeBuilder(String url, String repo, String description) {
         try{
             path = url;
-            name = repo;
+            String name = repo;
             name = name.toLowerCase();
 
             lvlOne(name, description);
@@ -815,14 +813,15 @@ seeder();
   try{
     path = url;
     name = name.toLowerCase();
+    String[] formattedNames = customFileNameFormatter(name);
     FileBasics[] files = {
-      new FileBasics("front-end/src/utils/components/"+name+".js","""
+      new FileBasics("front-end/src/utils/components/"+(formattedNames[0] != null ? formattedNames[0] : name)+".js","""
         function component(props) {
           return \"check\"
       }
       
       export default component;
-          """.replaceAll("component", name))};
+          """.replaceAll("component", formattedNames[0] != null ? formattedNames[0] : name))};
           for(FileBasics f : files){
             FileBasics.fileCreator(path, f.name, f.content);
           }
@@ -843,7 +842,7 @@ seeder();
         &nbsp;Nav
       </Link>
     </li>
-          """.replaceAll("nav", formattedNames != null ? formattedNames[0] : name).replaceAll("Nav", formattedNames[1]);
+          """.replaceAll("nav", formattedNames[0] != null ? formattedNames[0] : name).replaceAll("Nav", formattedNames[1]);
     String key = "</ul>";
     FileBasics.fileEditor(path, key, amendment);
   } catch (Exception e) {
@@ -866,14 +865,14 @@ seeder();
           &nbsp;Footer
         </Link>
       </div>
-            """.replaceAll("footer", formattedNames != null ? formattedNames[0] : name).replaceAll("Footer", formattedNames[1]);
+            """.replaceAll("footer", formattedNames[0] != null ? formattedNames[0] : name).replaceAll("Footer", formattedNames[1]);
     } else {
       amendment = """
         <div>
-        <a href=\"https://localhost:3000\" target=\"blank\"><img className='footerImg' src={require('./images/footer.png')} alt=\"Footer\">
+        <a href=\"https://localhost:3000\" target=\"blank\"><img className='footerImg' src={require('./images/footer.png')} alt=\"Footer\"/>
         </a>
       </div>
-            """.replaceAll("footer", formattedNames != null ? formattedNames[0] : name).replaceAll("Footer", formattedNames[1]);
+            """.replaceAll("footer", formattedNames[0] != null ? formattedNames[0] : name).replaceAll("Footer", formattedNames[1]);
     }
     String key = "</footer>";
     FileBasics.fileEditor(path, key, amendment);
@@ -886,20 +885,21 @@ seeder();
       try{
         name = name.toLowerCase();
         String[] formattedNames = customFileNameFormatter(name);
-        path = url + "front-end/src/"+formattedNames[0];
+        path = url + "front-end/src/";
         Directory dir[] = {
-          new Directory(path),
+          new Directory(formattedNames[0] != null ? formattedNames[0] : name),
         };
         
         for(Directory d : dir){
           Directory.dirCreator(path, d.name);
+          path = path + d.name + "/";
         }
         FileBasics[] files = {
-        new FileBasics(path+"/"+formattedNames[0]+".js","""
+        new FileBasics((formattedNames[0] != null? formattedNames[0] : name)+".js","""
           import React from \"react\";
           import { Link } from \"react-router-dom\";
           
-          function Dynamic() {
+          function dynamic() {
           
             return (
               <main className=\"text-center\">
@@ -908,8 +908,8 @@ seeder();
             );
           }
           
-          export default Dynamic;
-                """.replaceAll("Dynamic", formattedNames[1]))};
+          export default dynamic;
+                """.replace("dynamic", formattedNames[0] != null? formattedNames[0] : name).replaceAll("Dynamic", formattedNames[1]))};
       
               for(FileBasics f : files){
                 FileBasics.fileCreator(path, f.name, f.content);
@@ -917,10 +917,10 @@ seeder();
 
         String amendment1 = """
           import Dynamic from '../dynamic/dynamic';
-              """.replaceAll("dynamic", formattedNames != null ? formattedNames[0] : name).replaceAll("Dynamic", formattedNames[1]);
+              """.replaceAll("dynamic", formattedNames[0] != null ? formattedNames[0] : name).replaceAll("Dynamic", formattedNames[1]);
         String amendment2 = """
           <Route path=\"/dynamic\" element={<Dynamic />} />
-              """.replaceAll("dynamic", formattedNames != null ? formattedNames[0] : name).replaceAll("Dynamic", formattedNames[1]);
+              """.replaceAll("dynamic", formattedNames[0] != null ? formattedNames[0] : name).replaceAll("Dynamic", formattedNames[1]);
         String key1 = "import NotFound from \"./notFound\";";
         String key2 = "<Route element={<NotFound />} />";
         path = url + "front-end/src/layout/routes.js";

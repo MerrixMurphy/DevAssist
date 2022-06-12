@@ -6,6 +6,7 @@ import java.io.FileWriter;
 public class FileBasics {
     protected String name;
     protected String content;
+    //validation to not recreate file if it already exists
 
     protected FileBasics(String name, String content) {
         this.name = name;
