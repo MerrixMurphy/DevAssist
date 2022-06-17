@@ -74,7 +74,7 @@ public class BasicReact {
                       \"start\": \"npx concurrently 'npm run start:backend' 'npm run start:frontend'\",
                       \"start:backend\": \"npm --prefix ./back-end start\",
                       \"start:frontend\": \"npm --prefix ./front-end start\",
-                      \"start:dev\": \"npx concurrently \"npm run start:dev --prefix ./back-end\" \"npm start --prefix ./front-end\" \"
+                      \"start:dev\": \"npx concurrently \\\"npm run start:dev --prefix ./back-end\\\" \\\"npm start --prefix ./front-end\\\" \"
                   },
                   \"keywords\": [],
                   \"author\": \"Merrix Murphy\",
@@ -467,7 +467,7 @@ function listener() {
           }
 
           FileBasics files[] = {
-            new FileBasics("front-end/src/home/Home.js","""
+            new FileBasics("front-end/src/home/home.js","""
               import React from \"react\";
         import { Link } from \"react-router-dom\";
         
@@ -869,7 +869,7 @@ seeder();
     } else {
       amendment = """
         <div>
-        <a href=\"https://localhost:3000\" target=\"blank\"><img className='footerImg' src={require('./images/footer.png')} alt=\"Footer\"/>
+        <a href=\"https://localhost:3000\" target=\"blank\"><img className='footerImg' alt=\"Footer\"/>
         </a>
       </div>
             """.replaceAll("footer", formattedNames[0] != null ? formattedNames[0] : name).replaceAll("Footer", formattedNames[1]);
@@ -936,13 +936,13 @@ seeder();
         sub = sub.toLowerCase();
         String[] formattedNames = customFileNameFormatter(sub);
         String[] formattedDir = customFileNameFormatter(name);
-        path = url + "front-end/src/"+name+"/"+formattedNames[0]+".js";
+        path = url+name+"/";
         FileBasics[] files = {
-        new FileBasics(path,"""
+        new FileBasics(formattedNames[0] != null ? formattedNames[0] : sub+".js","""
           import React from \"react\";
           import { Link } from \"react-router-dom\";
           
-          function Dynamic() {
+          function MainDynamic() {
           
             return (
               <main className=\"text-center\">
@@ -951,22 +951,21 @@ seeder();
             );
           }
           
-          export default Dynamic;
-                """.replaceAll("Dynamic", formattedNames[1]))};
+          export default MainDynamic;
+                """.replaceAll("Dynamic", formattedNames[1]).replaceAll("Main", formattedDir[1]))};
       
               for(FileBasics f : files){
                 FileBasics.fileCreator(path, f.name, f.content);
               }
-
         String amendment1 = """
-          import Dynamic from '../dynamic-main/dynamic-sub';
-              """.replaceAll("dynamic-main", formattedDir != null ? formattedDir[0] : name).replaceAll("dynamic-sub", formattedNames != null ? formattedNames[0] : sub).replaceAll("Dynamic", formattedNames[1]);
+          import MainDynamic from \"../dynamic-main/dynamic-sub\";
+              """.replaceAll("dynamic-main", formattedDir[0] != null ? formattedDir[0] : name).replaceAll("dynamic-sub", formattedNames[0] != null ? formattedNames[0] : sub).replaceAll("Dynamic", formattedNames[1]).replaceAll("Main", formattedDir[1]);
         String amendment2 = """
-          <Route path=\"/dynamic-main/dynamic-sub\" element={<Dynamic />} />
-              """.replaceAll("dynamic-main", formattedDir != null ? formattedDir[0] : name).replaceAll("dynamic-sub", formattedNames != null ? formattedNames[0] : sub).replaceAll("Dynamic", formattedNames[1]);
-        String key1 = "import Dynamic from \"../dynamic/dynamic\";".replaceAll("dynamic", formattedDir != null ? formattedDir[0] : name).replaceAll("Dynamic", formattedDir[1]);
+          <Route path=\"/dynamic-main/dynamic-sub\" element={<MainDynamic />} />
+              """.replaceAll("dynamic-main", formattedDir[0] != null ? formattedDir[0] : name).replaceAll("dynamic-sub", formattedNames[0] != null ? formattedNames[0] : sub).replaceAll("Dynamic", formattedNames[1]).replaceAll("Main", formattedDir[1]);
+        String key1 = "import NotFound from \"./notFound\";";
         String key2 = "<Route element={<NotFound />} />";
-        path = url + "front-end/src/layout/routes.js";
+        path = url + "layout/routes.js";
         FileBasics.fileEditor(path, key1, amendment1);
         FileBasics.fileEditor(path, key2, amendment2);
       } catch (Exception e) {

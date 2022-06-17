@@ -9,7 +9,6 @@ public class Main {
     }
 
     public static void menu(File path){
-        //Make buttons into more of (4,2 grid)
         JFrame frame = new JFrame("DebAssist");
         Object[] options = {
         "Select Repo", 
@@ -26,7 +25,7 @@ public class Main {
         "external",
     };
     //start local web server and maybe git pull buttons?
-        int home = JOptionPane.showOptionDialog(frame,"Selected Repo: " + path.toString().substring(0),"DebAssist", JOptionPane.DEFAULT_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[7]);
+        int home = JOptionPane.showOptionDialog(frame,"Selected Repo: " + path.toString().substring(0),"DebAssist", JOptionPane.DEFAULT_OPTION,JOptionPane.PLAIN_MESSAGE,null,options,options[options.length - 1]);
         
         if(home == 0){
             path = new File("../");
@@ -73,9 +72,9 @@ public class Main {
     }
         else if(home == 3){
             if (!path.toString().equals("..")){
-            path = new File(path+"/front-end/src/");
+            File newPath = new File(path+"/front-end/src/");
             String[] excludeStrings = {"home", "layout", "utils", "App.js", "index.js"};
-            Object[] availablePages = path.list();
+            Object[] availablePages = newPath.list();
             Object[] copy = new Object[availablePages.length - 5];
 
             for(int j = 0; j < excludeStrings.length; j++){
@@ -98,7 +97,7 @@ public class Main {
                 String sub = (String)JOptionPane.showInputDialog(frame,"New Sub Page","DebAssist",JOptionPane.PLAIN_MESSAGE,null, null, null);
                 if ((sub != null) && (sub.length() > 0)) {
                 BasicReact reactapp = new BasicReact();
-                reactapp.addSub(path.toString()+"/", main, sub);
+                reactapp.addSub(newPath.toString()+"/", main, sub);
                 menu(path);
             } else {
                 menu(path);
