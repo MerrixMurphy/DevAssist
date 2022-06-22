@@ -61,7 +61,7 @@ public class BasicReact {
               {
                   \"name\": \"dynamic-react-app\",
                   \"version\": \"1.0.0\",
-                  \"description\": \"description\",
+                  \"description\": \"descriptions\",
                   \"private\": true,
                   \"repository\": {
                       \"type\": \"git\",
@@ -83,7 +83,7 @@ public class BasicReact {
                       \"node-fetch\": \"^3.2.4\"
                   }
               }
-              """.replaceAll("dynamic-react-app", formattedNames[0] != null ? formattedNames[0] : name).replaceAll("description", description)), 
+              """.replaceAll("dynamic-react-app", formattedNames[0] != null ? formattedNames[0] : name).replaceAll("descriptions", description)), 
               new FileBasics("README.md", 
               """
               # Dynamic React App
